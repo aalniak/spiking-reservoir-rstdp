@@ -6,6 +6,28 @@ three-factor) local learning — a CPU/GPU research prototype.**
 
 ---
 
+
+---
+
+## Results at a glance
+
+![Combined results](results/figures/combined_results.png)
+
+*Top row:* classification accuracy and prediction error by method, and the
+R-STDP learning curve. *Bottom row:* reservoir-size sweep, quantization
+robustness, and out-of-distribution generalization on IQ-jamming. The recurring
+story: **R-STDP (local, on-chip-style) learns every task well above chance but
+trails the offline gradient/closed-form methods** — the locality-vs-accuracy
+trade-off. R-STDP stays stable down to 8-bit weights/states/traces. Regenerate with:
+
+```bash
+python scripts/make_report_figures.py    # runs sweeps/ablations -> results/summary.json
+python scripts/make_combined_figure.py   # composes results/figures/combined_results.png
+```
+
+---
+
+
 ## 1. What is reservoir computing?
 
 A **reservoir** is a fixed (untrained) recurrent dynamical system that nonlinearly
