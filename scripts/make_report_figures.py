@@ -105,7 +105,7 @@ def sweep_quant(device):
     for name in ["basicmotions", "synthetic_iq_jamming"]:
         cfg = load_config(f"configs/{name}.yaml")
         bundle = load_dataset(cfg["dataset"], seed=0)
-        bits_list = [0, 4, 8, 12, 16]      # 0 = full precision
+        bits_list = [0, 16, 8, 4]          # 0 = full precision; decreasing precision
         accs, rates = [], []
         ep = cfg.get("training", {}).get("epochs", 200)
         for bits in bits_list:
@@ -211,11 +211,12 @@ def write_summary(size_sweep, quant_sweep, ablations):
             lines.append(f"| {name} | {N} | {r:.3f} | {l:.3f} | {rate:.3f} |")
 
     lines.append("\n## Quantization sweep (R-STDP test accuracy)\n")
-    lines.append("| dataset | FP | 4-bit | 8-bit | 12-bit | 16-bit |")
-    lines.append("|---|---|---|---|---|---|")
+    bits_hdr = next(iter(quant_sweep.values()))["bits"]
+    hdr = ["FP" if b == 0 else f"{b}-bit" for b in bits_hdr]
+    lines.append("| dataset | " + " | ".join(hdr) + " |")
+    lines.append("|---|" + "|".join(["---"] * len(hdr)) + "|")
     for name, d in quant_sweep.items():
-        a = d["acc"]
-        lines.append(f"| {name} | {a[0]:.3f} | {a[1]:.3f} | {a[2]:.3f} | {a[3]:.3f} | {a[4]:.3f} |")
+        lines.append(f"| {name} | " + " | ".join(f"{a:.3f}" for a in d["acc"]) + " |")
 
     lines.append("\n## Ablations (BasicMotions, R-STDP readout)\n")
     lines.append("| ablation | test_acc | reservoir_rate | output_rate |")
@@ -225,7 +226,13 @@ def write_summary(size_sweep, quant_sweep, ablations):
 
     with open("results/SUMMARY.md", "w") as f:
         f.write("\n".join(lines) + "\n")
-    print("wrote results/SUMMARY.md and figures in results/figures/")
+
+    # machine-readable dump so the combined-figure composer can read it without
+    # re-running any training.
+    import json
+    json.dump({"size_sweep": size_sweep, "quant_sweep": quant_sweep,
+               "ablations": ablations}, open("results/summary.json", "w"), indent=2)
+    print("wrote results/SUMMARY.md, results/summary.json and figures in results/figures/")
 
 
 def main():
