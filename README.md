@@ -50,7 +50,7 @@ We expose three eligibility formulations (selectable, compared in the ablations)
 pre×post traces), and `pre` (graded pre-trace only → a reward-modulated **delta
 rule**, the best-learning variant and our default for the headline numbers).
 
-## 4. Why is R-STDP more Loihi / on-chip-friendly than BPTT?
+## 4. Why is R-STDP more on-chip-friendly than BPTT?
 
 | Property | BPTT / surrogate-gradient | **R-STDP (this project)** |
 |---|---|---|
@@ -61,7 +61,7 @@ rule**, the best-learning variant and our default for the headline numbers).
 
 Backprop-through-time needs the whole unrolled computational graph and a backward
 pass — neither exists naturally on a neuromorphic chip. R-STDP needs only locally
-available signals (its own traces) plus a broadcast reward, which Loihi-2's
+available signals (its own traces) plus a broadcast reward, which some
 on-chip learning engine (graded reward + trace-based learning rules) is built for.
 
 ## 5. What is implemented (and runs here)
@@ -92,18 +92,8 @@ on-chip learning engine (graded reward + trace-based learning rules) is built fo
   unseen-SNR/JNR generalization split), and UEA loaders (BasicMotions,
   CharacterTrajectories, …) via `aeon`.
 
-## 6. What is Loihi-2-oriented but **not** actually deployed
 
-* [`src/lava_export.py`](src/lava_export.py) defines a **clean abstraction +
-  documented component→Lava/Loihi-2 mapping + a hardware-agnostic spec exporter**,
-  and auto-detects whether `lava` is importable. **Lava is not installed here and
-  Loihi-2 is not used.** If `lava` were present, a *minimal CPU-backend* skeleton
-  becomes available; running on real Loihi-2 silicon would additionally require
-  NxSDK/hardware and is explicitly out of scope. The module prints a Loihi-2
-  *readiness checklist* describing exactly which constraints the prototype already
-  satisfies and what a real port still needs.
-
-## 7. How to run each experiment
+## 6. How to run each experiment
 
 ```bash
 pip install -r requirements.txt
@@ -132,7 +122,7 @@ python -m pytest tests/ -q
 Results for `<exp>` land in `results/<exp>/<method>/metrics.json` (+ plots), with a
 combined `results/<exp>/results_table.md`.
 
-## 8. How to interpret the results
+## 7. How to interpret the results
 
 * **Classification**: compare `test_accuracy` of **rstdp** (local, on-chip-style)
   against **linear** (closed-form RC), **surrogate** (off-chip BPTT) and **gru**
@@ -147,10 +137,10 @@ combined `results/<exp>/results_table.md`.
 * **Quantization**: R-STDP stays stable down to **8-bit**; the **4-bit** stress
   test typically collapses (reported as a finding).
 * **Structure**: `n_trainable_synapses` shows how few weights actually learn (only
-  the readout) — the key Loihi-friendliness metric.
+  the readout).
 
 See [`reports/technical_report.md`](reports/technical_report.md) for the full
-write-up, results tables, limitations, and the Lava/Loihi-2 deployment gap.
+write-up, results tables, and limitations.
 
 ## Repository layout
 
