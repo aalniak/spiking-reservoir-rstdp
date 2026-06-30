@@ -1,14 +1,8 @@
 # rstpd_spiking_reservoir_timeseries
 
 **Reservoir-based spiking time-series processing + R-STDP (reward-modulated STDP /
-three-factor) local learning — a CPU/GPU research prototype designed with future
-Lava / Loihi-2 deployment in mind.**
+three-factor) local learning — a CPU/GPU research prototype.**
 
-> ⚠️ **Honesty note.** This is a **CPU/GPU prototype**. It is **not** an actual
-> Loihi-2 implementation. Nothing here runs on Loihi-2 unless explicitly executed
-> on the Lava Loihi-2 backend (which is *not* done here — see
-> [`src/lava_export.py`](src/lava_export.py)). The design is *architecturally
-> compatible* with an eventual Lava/Loihi-2 port; that is the claim, no more.
 
 ---
 
