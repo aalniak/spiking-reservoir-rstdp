@@ -1,0 +1,66 @@
+# BasicMotions -- small UEA multivariate time-series classification (sanity check).
+# 4 classes, 6 channels, length 100. Loaded via aeon.
+name: basicmotions
+seed: 0
+device: auto
+output_dir: results
+
+dataset:
+  name: basicmotions
+  val_fraction: 0.2
+
+encoder:
+  name: posneg          # positive/negative event encoder (2*C channels)
+  threshold: 0.3
+
+reservoir:
+  kind: lif
+  n_reservoir: 300
+  connectivity: 0.12
+  spectral_radius: 0.9
+  input_scaling: 2.0
+  input_connectivity: 1.0
+  exc_ratio: 0.8
+  leak: 0.9
+  v_threshold: 1.0
+  trace_decay: 0.9
+
+hidden:
+  size: 0               # set >0 to insert a fixed spiking hidden layer
+
+readout:                # R-STDP (three-factor) readout -- the only plastic weights
+  lr: 0.05
+  eligibility_mode: pre     # 'pre' (delta-rule, best acc) | 'stdp' | 'hybrid'
+  reward_mode: error        # 'error' | 'class_specific' | 'global'
+  elig_decay: 0.97
+  pre_decay: 0.9
+  post_decay: 0.9
+  reward_scale: 1.0
+  neg_reward_scale: 1.0
+  homeo_beta: 0.0
+  target_rate: 0.2
+  teacher_forcing: false
+  teacher_strength: 0.0
+  current_scale: 0.013
+  leak: 1.0
+  v_threshold: 1.0
+  w_min: -3.0
+  w_max: 3.0
+  w_init_scale: 0.05
+
+quantization:
+  enabled: false
+  bits: 8
+  weights: true
+  states: true
+  traces: true
+
+training:
+  epochs: 200
+  batch_size: 32
+  surrogate_epochs: 150
+  surrogate_lr: 0.005
+  gru_hidden: 32
+  gru_epochs: 150
+  gru_lr: 0.005
+  rnn_kind: gru

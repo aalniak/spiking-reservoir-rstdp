@@ -1,0 +1,72 @@
+{
+  "task_type": "regression",
+  "lava_installed": false,
+  "is_loihi2_deployment": false,
+  "quantization_bits": null,
+  "components": [
+    {
+      "name": "encoder",
+      "kind": "io",
+      "n_neurons": 0,
+      "n_synapses": 1,
+      "plastic": false,
+      "lava_target": "lava Process (spike source)",
+      "notes": "encoder={'name': 'identity', 'scale': 1.0}"
+    },
+    {
+      "name": "input_projection",
+      "kind": "connection",
+      "n_neurons": 0,
+      "n_synapses": 500,
+      "plastic": false,
+      "lava_target": "lava.proc.dense.Dense",
+      "notes": "fixed input weights"
+    },
+    {
+      "name": "reservoir",
+      "kind": "process",
+      "n_neurons": 500,
+      "n_synapses": 25000,
+      "plastic": false,
+      "lava_target": "lava.proc.lif.LIF + Dense (recurrent)",
+      "notes": "leak=0.92, v_th=0.6, fixed sparse recurrent (conn=0.1)"
+    },
+    {
+      "name": "readout",
+      "kind": "learning",
+      "n_neurons": 1,
+      "n_synapses": 500,
+      "plastic": true,
+      "lava_target": "lava.proc.dense.Dense + Loihi2FLearningRule",
+      "notes": "PLASTIC: three-factor (pre/post traces + reward). The only learned weights."
+    },
+    {
+      "name": "output_counter",
+      "kind": "io",
+      "n_neurons": 1,
+      "n_synapses": 0,
+      "plastic": false,
+      "lava_target": "lava Process (spike accumulator)",
+      "notes": "argmax over output spike counts"
+    },
+    {
+      "name": "reward",
+      "kind": "io",
+      "n_neurons": 0,
+      "n_synapses": 0,
+      "plastic": false,
+      "lava_target": "external modulatory Process",
+      "notes": "delivers per-output reward / error (third factor)"
+    }
+  ],
+  "loihi2_readiness": {
+    "fixed_reservoir_no_on_chip_learning": true,
+    "plasticity_restricted_to_one_readout_projection": true,
+    "updates_are_local_pre_post_traces_plus_third_factor": true,
+    "no_bptt_in_main_method": true,
+    "explicit_binary_spike_communication": true,
+    "supports_weight_state_trace_quantization": true,
+    "modest_layer_sizes": true,
+    "graded_reward_delivered_as_external_process": true
+  }
+}

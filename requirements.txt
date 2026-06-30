@@ -1,0 +1,20 @@
+# Core (required)
+numpy>=1.24,<2.1        # <2.1 keeps numba/aeon happy; code itself supports numpy 2.x
+scipy>=1.10
+torch>=2.0             # CPU or CUDA build; this prototype runs on GPU/CPU
+scikit-learn>=1.3      # linear-readout baselines (logistic / ridge)
+matplotlib>=3.6        # plots
+pyyaml>=6.0            # configs
+pandas>=2.0
+tqdm>=4.6
+
+# UEA/UCR dataset loaders (BasicMotions, CharacterTrajectories, ...).
+# Pulls numba; synthetic tasks (Mackey-Glass, NARMA10, IQ jamming) work without it.
+aeon>=1.0
+
+# Testing
+pytest>=7.0
+
+# OPTIONAL -- Lava / Loihi-2 path (NOT installed/required; see src/lava_export.py).
+# This repo is a CPU/GPU prototype and does not claim Loihi-2 deployment.
+# lava-nc>=0.9        # CPU simulation backend for Lava

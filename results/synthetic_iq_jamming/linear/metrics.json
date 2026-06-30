@@ -1,0 +1,25 @@
+{
+  "task_type": "classification",
+  "accuracy": 0.9975,
+  "confusion_matrix": [
+    [
+      200,
+      0
+    ],
+    [
+      1,
+      199
+    ]
+  ],
+  "activity": {
+    "reservoir_spike_rate": 0.21966466903686524
+  },
+  "train_accuracy": 0.9975,
+  "val_accuracy": 0.9966666666666667,
+  "test_accuracy": 0.9975,
+  "test_ood_accuracy": 0.7325,
+  "method": "linear",
+  "timing": {
+    "train_time_s": 2.4994290260365233
+  }
+}

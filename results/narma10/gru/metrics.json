@@ -1,0 +1,12 @@
+{
+  "method": "gru",
+  "task_type": "regression",
+  "mse": 0.2152549922466278,
+  "mae": 0.35028672218322754,
+  "rmse": 0.463955808506185,
+  "nrmse": 0.522233784198761,
+  "timing": {
+    "train_time_s": 1.1952071810374036
+  },
+  "training_note": "OFF-CHIP GRU BPTT (DL reference)."
+}

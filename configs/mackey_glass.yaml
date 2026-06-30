@@ -1,0 +1,51 @@
+# Mackey-Glass chaotic time-series one-step prediction (reservoir memory task).
+name: mackey_glass
+seed: 0
+device: auto
+output_dir: results
+
+dataset:
+  name: mackey_glass
+  tau: 17
+  horizon: 1
+  train_len: 2500
+  val_len: 600
+  test_len: 1000
+  washout: 100
+
+encoder:
+  name: posneg          # event encoding of the smooth chaotic signal
+  threshold: 0.2
+
+reservoir:
+  kind: lif
+  n_reservoir: 500
+  connectivity: 0.1
+  spectral_radius: 0.95
+  input_scaling: 1.5
+  input_connectivity: 1.0
+  exc_ratio: 0.8
+  leak: 0.9
+  v_threshold: 1.0
+  trace_decay: 0.9
+
+hidden:
+  size: 0
+
+readout:                # regression: local delta readout (main) + ridge (baseline)
+  trace_decays: [0.4, 0.8, 0.95]   # multi-timescale reservoir state for the readout
+  local_lr: 0.3
+  local_epochs: 15
+
+ridge:
+  alphas: [1.0, 10.0, 100.0, 1000.0, 10000.0]
+
+quantization:
+  enabled: false
+  bits: 8
+
+training:
+  gru_hidden: 32
+  gru_epochs: 200
+  gru_lr: 0.005
+  rnn_kind: gru

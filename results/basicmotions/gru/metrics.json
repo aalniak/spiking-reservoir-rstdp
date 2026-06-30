@@ -1,0 +1,12 @@
+{
+  "method": "gru",
+  "task_type": "classification",
+  "train_accuracy": 1.0,
+  "val_accuracy": 0.875,
+  "test_accuracy": 0.875,
+  "accuracy": 0.875,
+  "timing": {
+    "train_time_s": 0.46401310397777706
+  },
+  "training_note": "OFF-CHIP GRU BPTT on raw signal (DL reference)."
+}

@@ -1,0 +1,71 @@
+# Synthetic IQ jamming detection (optional wireless-oriented task).
+# 2-channel I/Q input, binary clean-vs-jammed. Tests generalization to unseen
+# SNR/JNR via the held-out 'test_ood' split.
+name: synthetic_iq_jamming
+seed: 0
+device: auto
+output_dir: results
+
+dataset:
+  name: synthetic_iq_jamming
+  n_per_class: 600          # training samples per class (val/test scaled down)
+  T: 128
+  sps: 4                    # samples per symbol
+  modulations: [bpsk, qpsk, 16qam]
+  jammers: [tone, broadband, pulsed, swept]
+  snr_range: [10.0, 20.0]   # training/in-distribution SNR
+  jnr_range: [5.0, 15.0]    # training/in-distribution JNR
+  ood_snr_range: [0.0, 10.0]  # unseen, harder SNR for generalization test
+  ood_jnr_range: [0.0, 5.0]   # unseen, weaker jammer for generalization test
+
+encoder:
+  name: posneg              # event coding of the I/Q waveform
+  threshold: 0.3
+
+reservoir:
+  kind: lif
+  n_reservoir: 200
+  connectivity: 0.12
+  spectral_radius: 0.9
+  input_scaling: 2.0
+  input_connectivity: 1.0
+  exc_ratio: 0.8
+  leak: 0.9
+  v_threshold: 1.0
+  trace_decay: 0.9
+
+hidden:
+  size: 0
+
+readout:
+  lr: 0.05
+  eligibility_mode: pre
+  reward_mode: error
+  elig_decay: 0.97
+  pre_decay: 0.9
+  post_decay: 0.9
+  reward_scale: 1.0
+  neg_reward_scale: 1.0
+  homeo_beta: 0.0
+  target_rate: 0.2
+  teacher_forcing: false
+  current_scale: 0.015
+  leak: 1.0
+  v_threshold: 1.0
+  w_min: -3.0
+  w_max: 3.0
+  w_init_scale: 0.05
+
+quantization:
+  enabled: false
+  bits: 8
+
+training:
+  epochs: 60
+  batch_size: 128
+  surrogate_epochs: 80
+  surrogate_lr: 0.005
+  gru_hidden: 32
+  gru_epochs: 80
+  gru_lr: 0.005
+  rnn_kind: gru

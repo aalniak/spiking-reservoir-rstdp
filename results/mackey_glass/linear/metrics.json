@@ -1,0 +1,16 @@
+{
+  "task_type": "regression",
+  "mse": 0.016464795917272568,
+  "mae": 0.10383353382349014,
+  "rmse": 0.12831522091035252,
+  "nrmse": 0.127699077129364,
+  "alpha": 1000.0,
+  "val_nrmse": 0.13777147233486176,
+  "activity": {
+    "reservoir_spike_rate": 0.17890320718288422
+  },
+  "method": "linear",
+  "timing": {
+    "train_time_s": 3.493255942943506
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "method": "rstdp",
+  "task_type": "regression",
+  "mse": 0.5715740323066711,
+  "mae": 0.6161439418792725,
+  "rmse": 0.756025153223536,
+  "nrmse": 0.8509901762008667,
+  "activity": {
+    "reservoir_spike_rate": 0.24773120880126953,
+    "reservoir_sparsity": 0.7522687911987305
+  },
+  "structure": {
+    "n_neurons": 501,
+    "n_synapses": 26000,
+    "n_trainable_synapses": 500,
+    "n_reservoir_recurrent_synapses": 25000,
+    "n_input_synapses": 500,
+    "n_readout_synapses": 500
+  },
+  "timing": {
+    "train_time_s": 4.48371748207137
+  },
+  "note": "regression uses the LOCAL error-modulated (three-factor / delta) readout -- no BPTT. The closed-form ridge readout is the linear baseline.",
+  "quantization": {
+    "enabled": false,
+    "bits": 8
+  }
+}

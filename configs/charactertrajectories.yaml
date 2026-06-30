@@ -1,0 +1,64 @@
+# CharacterTrajectories -- main public UEA multivariate classification dataset.
+# 20 classes, 3 channels, variable length (edge-padded). Loaded via aeon.
+# NOTE: larger than BasicMotions; this config is ready-to-run.
+name: charactertrajectories
+seed: 0
+device: auto
+output_dir: results
+
+dataset:
+  name: charactertrajectories
+  val_fraction: 0.2
+  max_train: null        # set e.g. 800 to subsample the training set for speed
+
+encoder:
+  name: posneg
+  threshold: 0.3
+
+reservoir:
+  kind: lif
+  n_reservoir: 300
+  connectivity: 0.1
+  spectral_radius: 0.9
+  input_scaling: 2.0
+  input_connectivity: 1.0
+  exc_ratio: 0.8
+  leak: 0.92
+  v_threshold: 1.0
+  trace_decay: 0.9
+
+hidden:
+  size: 0
+
+readout:
+  lr: 0.05
+  eligibility_mode: pre
+  reward_mode: error
+  elig_decay: 0.97
+  pre_decay: 0.9
+  post_decay: 0.9
+  reward_scale: 1.0
+  neg_reward_scale: 1.0
+  homeo_beta: 0.0
+  target_rate: 0.2
+  teacher_forcing: false
+  current_scale: 0.01
+  leak: 1.0
+  v_threshold: 1.0
+  w_min: -3.0
+  w_max: 3.0
+  w_init_scale: 0.05
+
+quantization:
+  enabled: false
+  bits: 8
+
+training:
+  epochs: 120
+  batch_size: 128
+  surrogate_epochs: 120
+  surrogate_lr: 0.005
+  gru_hidden: 48
+  gru_epochs: 120
+  gru_lr: 0.005
+  rnn_kind: gru
